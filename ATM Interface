@@ -1,0 +1,130 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ATMAccount {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your account number: ");
+        String accountNumber = scanner.next();
+        System.out.print("Enter your PIN: ");
+        int pin = scanner.nextInt();
+        double withdrawl_amt = scanner.nextDouble();
+        double initial_bal = scanner.nextDouble();
+        if (initial_bal >= withdrawl_amt && withdrawl_amt % 5 == 0) {
+            initial_bal -= (withdrawl_amt + 0.5);
+            System.out.printf("Your remaining balance is: %.2f", initial_bal);
+        } else {
+            System.out.printf("Initial balance is: %.2f", initial_bal);
+        }
+        scanner.close();
+    }
+}
+
+class Account {
+	public static void main(String[] args) {		
+	}
+        private String accountNumber;
+        private int pin;
+        private double balance;
+        private ArrayList<String> transactions;
+        public Account(String accountNumber, int pin) {	
+            this.accountNumber = accountNumber;
+            this.pin = pin;
+            this.balance = 1000.00;
+            this.transactions = new ArrayList<String>();
+        }
+        public boolean validateAccount(String accountNumber, int pin) {
+            if (this.accountNumber.equals(accountNumber) && this.pin == pin) {
+                 return true;
+            }
+            return false;
+        }
+        public void getTransactions() {
+            System.out.println("Transactions:");
+            int i = 1;
+            for (String transaction : transactions) {
+                 System.out.println(i + ". " + transaction);
+                 i++;
+            }
+        }
+        public void withdraw() {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Enter the amount to withdraw:");
+            double amount = scan.nextDouble();
+            if (amount > this.balance) {
+                 System.out.println("Insufficient funds.");
+                 return;
+            }
+            this.balance -= amount;
+            this.transactions.add("Withdraw: $" + amount);
+            System.out.println("Withdrawal successful.");
+        }
+        public void deposit() {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Enter the amount to deposit:");
+            double amount = scan.nextDouble();
+            this.balance += amount;
+            this.transactions.add("Deposit: $" + amount);
+            System.out.println("Deposit successful.");
+        }
+        public void transfer() {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Enter recipient account number:");
+            String recipientAccountNumber = scan.nextLine();
+            if (!validateAccount(recipientAccountNumber, 1234)) {
+                 System.out.println("Invalid recipient account number.");
+                 return;
+            }
+            System.out.println("Enter the amount to transfer:");
+            double amount = scan.nextDouble();
+            if (amount > this.balance) {
+                 System.out.println("Insufficient funds.");
+                 return;
+            }
+            this.balance -= amount;
+            this.transactions.add("Transfer: $" + amount + " to account number " + recipientAccountNumber);
+            System.out.println("Transfer successful.");
+        }
+    }
+
+    class ATM {
+        public static void main(String[] args) {
+             Account account = new Account("123456789", 1234);
+             Scanner scan = new Scanner(System.in);
+             System.out.println("Enter your account number: ");
+             String accountNumber = scan.nextLine();
+             System.out.println("Enter your PIN: ");
+             int pin = scan.nextInt();
+             if (account.validateAccount(accountNumber, pin)) {
+                   System.out.println("Welcome!");
+                   while (true) {
+                        System.out.println("Choose an option:");
+                        System.out.println("1. Transactions History");
+                        System.out.println("2. Withdraw");
+                        System.out.println("3. Deposit");
+                        System.out.println("4. Transfer");
+                        System.out.println("5. Quit");
+                        int option = scan.nextInt();
+                        switch (option) {
+                            case 1:
+                                account.getTransactions();
+                                break;
+                            case 2:
+                                account.withdraw();
+                                break;
+                            case 3:
+                                account.deposit();
+                                break;
+                            case 4:
+                                account.transfer();
+                                break;
+                            case 5:
+                                System.exit(0);
+                        }
+                    }
+                } else {
+                      System.out.println("Invalid account number or PIN.");
+                      main(null);
+            }
+      }
+}
